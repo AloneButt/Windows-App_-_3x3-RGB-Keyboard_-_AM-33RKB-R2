@@ -61,3 +61,5 @@ Hardware, firmware, and configuration tool all made from scratch.
 
 ---
 
+Let's go
+

@@ -1,5 +1,5 @@
 // Program.cs
-using ArchMasterConfig.Forms;
+using ArchMasterConfig.Forms;   // <-- points to MainForm
 
 namespace ArchMasterConfig
 {

@@ -56,7 +56,7 @@ A compact **3x3 mechanical macro keyboard** powered by an **Arduino Pro Micro**,
 
 ## 🧑‍💻 Author
 
-Designed and developed by **[Soso Chkhortolia @ ARCHMASTER]**  
+Designed and developed by **Soso Chkhortolia @ ARCHMASTER**  
 Hardware, firmware, and configuration tool all made from scratch.
 
 ---

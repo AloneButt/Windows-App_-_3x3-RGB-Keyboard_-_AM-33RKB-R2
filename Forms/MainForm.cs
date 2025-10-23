@@ -7,11 +7,23 @@ using System.IO.Ports;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using static ArchMasterConfig.Forms.MainForm;
 
 namespace ArchMasterConfig.Forms
 {
     public partial class MainForm : Form
     {
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int HTCAPTION = 0x2;
+
+        private readonly Button btnMinimize = new();
+        private readonly Button btnClose = new();
         private SerialPort? serialPort;
         private readonly string configPath = "config.json";
         private readonly Dictionary<string, Dictionary<string, string>> config = new();
@@ -31,14 +43,19 @@ namespace ArchMasterConfig.Forms
         private readonly Label  lblRemap   = new();
 
         // ──────────────────────────────────────
-        //  Shared colours
+        //  NEW Color Palette: 081c15 → 1b4332 → 2d6a4f → 40916c → 52b788 → 74c69d → 95d5b2 → b7e4c7 → d8f3dc
         // ────────
         public static class Colors
         {
-            public static readonly Color DarkGreen  = Color.FromArgb(61, 141, 122);   // #3D8D7A
-            public static readonly Color LightGreen = Color.FromArgb(179, 216, 168);  // #B3D8A8
-            public static readonly Color Cream      = Color.FromArgb(251, 255, 228);  // #FBFFE4
-            public static readonly Color Mint       = Color.FromArgb(163, 209, 198);  // #A3D1C6
+            public static readonly Color DeepGreen      = ColorTranslator.FromHtml("#081c15");
+            public static readonly Color DarkGreen      = ColorTranslator.FromHtml("#1b4332");
+            public static readonly Color ForestGreen    = ColorTranslator.FromHtml("#2d6a4f");
+            public static readonly Color TealGreen      = ColorTranslator.FromHtml("#40916c");
+            public static readonly Color MidGreen       = ColorTranslator.FromHtml("#52b788");
+            public static readonly Color LightTeal      = ColorTranslator.FromHtml("#74c69d");
+            public static readonly Color PaleGreen      = ColorTranslator.FromHtml("#95d5b2");
+            public static readonly Color MintCream      = ColorTranslator.FromHtml("#b7e4c7");
+            public static readonly Color LightMint      = ColorTranslator.FromHtml("#d8f3dc");
         }
 
         public MainForm()
@@ -51,44 +68,82 @@ namespace ArchMasterConfig.Forms
         #region UI Setup
         private void SetupUI()
         {
-            // ── Form ─────────────────────────────────────
             Text                = "ARCHMASTER Keyboard Config";
             Size                = new Size(760, 620);
             StartPosition       = FormStartPosition.CenterScreen;
-            FormBorderStyle     = FormBorderStyle.FixedSingle;
+            FormBorderStyle     = FormBorderStyle.None;
             BackColor           = Colors.DarkGreen;
-            Font                = new Font("Segoe UI", 9F);
+            Font                = new Font("Poppins-regular", 9F);
             Icon                = new Icon(@"media\archmaster.ico");
 
             // ── Header ───────────────────────────────────
             pnlHeader.Dock      = DockStyle.Top;
             pnlHeader.Height    = 70;
-            pnlHeader.BackColor = Colors.LightGreen;
+            pnlHeader.BackColor = Colors.ForestGreen;
             pnlHeader.Padding   = new Padding(15);
-            pnlHeader.Paint    += (s, e) =>
+            pnlHeader.Paint += (s, e) =>
             {
-                using var pen = new Pen(Colors.Mint, 3);
+                using var pen = new Pen(Colors.TealGreen, 3);
                 e.Graphics.DrawLine(pen, 0, pnlHeader.Height - 1, pnlHeader.Width, pnlHeader.Height - 1);
+            };
+            pnlHeader.MouseDown += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    ReleaseCapture();
+                    SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+                }
             };
 
             lblTitle.Text       = "ARCHMASTER";
-            lblTitle.Font       = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblTitle.ForeColor  = Colors.DarkGreen;
+            lblTitle.Font       = new Font("Poppins-regular", 16F, FontStyle.Bold);
+            lblTitle.ForeColor  = Colors.LightMint;
             lblTitle.AutoSize   = true;
             lblTitle.Location   = new Point(15, 18);
             pnlHeader.Controls.Add(lblTitle);
             Controls.Add(pnlHeader);
 
+            // ── Custom Window Buttons ───────────────────────────────
+            btnMinimize.Text = "MINIMIZE";
+            btnMinimize.Font = new Font("Poppins-regular", 10F, FontStyle.Bold);
+            btnMinimize.ForeColor = Colors.LightMint;
+            btnMinimize.BackColor = Colors.ForestGreen;
+            btnMinimize.FlatStyle = FlatStyle.Flat;
+            btnMinimize.FlatAppearance.BorderSize = 0;
+            btnMinimize.Size = new Size(120, 40);
+            btnMinimize.Location = new Point(pnlHeader.Width - 240, 15);
+            btnMinimize.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnMinimize.Cursor = Cursors.Hand;
+            btnMinimize.Click += (s, e) => WindowState = FormWindowState.Minimized;
+            btnMinimize.MouseEnter += (s, e) => btnMinimize.BackColor = Colors.MidGreen;
+            btnMinimize.MouseLeave += (s, e) => btnMinimize.BackColor = Colors.ForestGreen;
+
+            btnClose.Text = "CLOSE";
+            btnClose.Font = new Font("Poppins-regular", 10F, FontStyle.Bold);
+            btnClose.ForeColor = Colors.LightMint;
+            btnClose.BackColor = Colors.ForestGreen;
+            btnClose.FlatStyle = FlatStyle.Flat;
+            btnClose.FlatAppearance.BorderSize = 0;
+            btnClose.Size = new Size(120, 40);
+            btnClose.Location = new Point(pnlHeader.Width - 120, 15);
+            btnClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnClose.Cursor = Cursors.Hand;
+            btnClose.Click += (s, e) => Close();
+            btnClose.MouseEnter += (s, e) => btnClose.BackColor = Color.FromArgb(200, 50, 50);
+            btnClose.MouseLeave += (s, e) => btnClose.BackColor = Colors.ForestGreen;
+
+            pnlHeader.Controls.AddRange(new[] { btnMinimize, btnClose });
+
             // ── Mode selector ─────────────────────────────
             lblMode.Text        = "Mode:";
-            lblMode.ForeColor   = Colors.Cream;
+            lblMode.ForeColor   = Colors.MintCream;
             lblMode.Location    = new Point(30, 90);
             lblMode.AutoSize    = true;
 
             cmbMode.Items.AddRange(new[] { "Mode 1", "Mode 2" });
             cmbMode.SelectedIndex = 0;
             cmbMode.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbMode.BackColor   = Colors.Mint;
+            cmbMode.BackColor   = Colors.LightTeal;
             cmbMode.ForeColor   = Colors.DarkGreen;
             cmbMode.FlatStyle   = FlatStyle.Flat;
             cmbMode.Location    = new Point(85, 87);
@@ -96,17 +151,8 @@ namespace ArchMasterConfig.Forms
             cmbMode.SelectedIndexChanged += (s, e) => PopulateGrid();
 
             // ── 3x3 key-grid panel ───────────────────────
-            pnlKeyGrid.Location = new Point(30, 130);
-            pnlKeyGrid.Size     = new Size(280, 280);
-            pnlKeyGrid.BackColor = Color.FromArgb(240, 250, 242);
-            pnlKeyGrid.Paint    += (s, e) =>
-            {
-                using var pen = new Pen(Colors.Mint, 4);
-                using var path = RoundedRect(pnlKeyGrid.ClientRectangle, 24);
-                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                e.Graphics.DrawPath(pen, path);
-            };
+            pnlKeyGrid.Size     = new Size(310, 310);
+            pnlKeyGrid.BackColor = Colors.MintCream;
 
             const int btnSize = 82;
             const int spacing = 20;
@@ -125,7 +171,7 @@ namespace ArchMasterConfig.Forms
                     PhysicalKey= ((char)('A' + r * 3 + c)).ToString(),
                     Text       = ((char)('A' + r * 3 + c)).ToString(),
                     CornerRadius = 18,
-                    OutlineColor = MainForm.Colors.Mint,
+                    OutlineColor = Colors.TealGreen,
                     OutlineThickness = 4
                 };
 
@@ -136,59 +182,104 @@ namespace ArchMasterConfig.Forms
 
             // ── Remap field ───────────────────────────────
             lblRemap.Text       = "Remap to:";
-            lblRemap.ForeColor  = Colors.Cream;
+            lblRemap.ForeColor  = Colors.MintCream;
             lblRemap.Location   = new Point(330, 130);
             lblRemap.AutoSize   = true;
 
             txtRemap.Location   = new Point(330, 155);
             txtRemap.Size       = new Size(240, 28);
-            txtRemap.BackColor  = Colors.Mint;
+            txtRemap.BackColor  = Colors.LightTeal;
             txtRemap.ForeColor  = Colors.DarkGreen;
-            txtRemap.Font       = new Font("Segoe UI", 10F);
+            txtRemap.Font       = new Font("Poppins-regular", 10F);
             txtRemap.BorderStyle= BorderStyle.FixedSingle;
             txtRemap.KeyDown    += TxtRemap_KeyDown;
 
             // ── Connect / Save buttons ───────────────────
             btnConnect.Text               = "Connect Arduino";
             btnConnect.FlatStyle          = FlatStyle.Flat;
-            btnConnect.BackColor          = Colors.LightGreen;
-            btnConnect.ForeColor          = Colors.DarkGreen;
+            btnConnect.BackColor          = Colors.ForestGreen;
+            btnConnect.ForeColor          = Colors.LightMint;
             btnConnect.FlatAppearance.BorderSize = 0;
-            btnConnect.Font               = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnConnect.Font               = new Font("Poppins-regular", 9F, FontStyle.Bold);
             btnConnect.Size               = new Size(150, 40);
             btnConnect.Location           = new Point(30, 430);
             btnConnect.Click              += BtnConnect_Click;
-            btnConnect.MouseEnter         += (s, e) => btnConnect.BackColor = Colors.Mint;
-            btnConnect.MouseLeave         += (s, e) => btnConnect.BackColor = Colors.LightGreen;
+            btnConnect.MouseEnter         += (s, e) => btnConnect.BackColor = Colors.MidGreen;
+            btnConnect.MouseLeave         += (s, e) => btnConnect.BackColor = Colors.ForestGreen;
 
             btnSave.Text                  = "Save Config";
             btnSave.FlatStyle             = FlatStyle.Flat;
-            btnSave.BackColor             = Colors.Mint;
+            btnSave.BackColor             = Colors.LightTeal;
             btnSave.ForeColor             = Colors.DarkGreen;
             btnSave.FlatAppearance.BorderSize = 0;
-            btnSave.Font                  = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnSave.Font                  = new Font("Poppins-regular", 9F, FontStyle.Bold);
             btnSave.Size                  = new Size(120, 40);
             btnSave.Location              = new Point(195, 430);
             btnSave.Click                 += BtnSave_Click;
 
             // ── Status label ─────────────────────────────
             lblStatus.Text                = "Not connected";
-            lblStatus.ForeColor           = Colors.Cream;
-            lblStatus.Font                = new Font("Segoe UI", 9F, FontStyle.Italic);
+            lblStatus.ForeColor           = Colors.MintCream;
+            lblStatus.Font                = new Font("Poppins-regular", 9F, FontStyle.Italic);
             lblStatus.Location            = new Point(30, 490);
             lblStatus.AutoSize            = true;
 
-            // Add all controls
-            Controls.AddRange(new Control[]
+            // ── Main layout ────────────────────────────────
+            var layout = new TableLayoutPanel
             {
-                lblMode, cmbMode, pnlKeyGrid, lblRemap, txtRemap,
-                btnConnect, btnSave, lblStatus
-            });
+                Dock = DockStyle.Fill,
+                Padding = new Padding(20, 80, 20, 20),
+                ColumnCount = 2,
+                RowCount = 3,
+                BackColor = Colors.DarkGreen
+            };
+
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45F));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 55F));
+
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+            var modePanel = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.LeftToRight,
+                AutoSize = true,
+                BackColor = Colors.DarkGreen
+            };
+            modePanel.Controls.Add(lblMode);
+            modePanel.Controls.Add(cmbMode);
+
+            var remapPanel = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.TopDown,
+                AutoSize = true,
+                BackColor = Colors.DarkGreen
+            };
+            remapPanel.Controls.Add(lblRemap);
+            remapPanel.Controls.Add(txtRemap);
+
+            var buttonPanel = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.LeftToRight,
+                AutoSize = true,
+                BackColor = Colors.DarkGreen
+            };
+            buttonPanel.Controls.Add(btnConnect);
+            buttonPanel.Controls.Add(btnSave);
+
+            layout.Controls.Add(modePanel, 0, 0);
+            layout.Controls.Add(pnlKeyGrid, 0, 1);
+            layout.SetRowSpan(pnlKeyGrid, 2);
+            layout.Controls.Add(remapPanel, 1, 0);
+            layout.Controls.Add(buttonPanel, 0, 2);
+            layout.Controls.Add(lblStatus, 0, 3);
+            Controls.Add(layout);
         }
 
         private static GraphicsPath RoundedRect(Rectangle r, int radius)
         {
-            var p = new GraphicsPath();  // Fixed: was 'p148'
+            var p = new GraphicsPath();
             int d = radius * 2;
             p.AddArc(r.X, r.Y, d, d, 180, 90);
             p.AddArc(r.Right - d, r.Y, d, d, 270, 90);
@@ -211,7 +302,6 @@ namespace ArchMasterConfig.Forms
         {
             if (sender is not KeyButton btn) return;
 
-            // Desi
             foreach (var k in keyGrid)
             {
                 k.IsSelected = false;
@@ -247,7 +337,7 @@ namespace ArchMasterConfig.Forms
             var json = JsonConvert.SerializeObject(config, Formatting.Indented);
             System.IO.File.WriteAllText(configPath, json);
             lblStatus.Text = "Config saved!";
-            lblStatus.ForeColor = Colors.LightGreen;
+            lblStatus.ForeColor = Colors.MidGreen;
             Task.Delay(2000).ContinueWith(_ => Invoke(() =>
                 lblStatus.Text = serialPort?.IsOpen == true
                     ? $"Connected to {serialPort.PortName}"
@@ -284,9 +374,8 @@ namespace ArchMasterConfig.Forms
                 config[mode][selectedKeyButton.PhysicalKey] = txtRemap.Text.Trim();
                 selectedKeyButton.RemapText = txtRemap.Text.Trim();
 
-                // visual reset
                 selectedKeyButton.IsSelected = false;
-                selectedKeyButton.BackColor = Colors.Cream;
+                selectedKeyButton.BackColor = Colors.MintCream;
                 selectedKeyButton.Invalidate();
                 selectedKeyButton = null;
                 txtRemap.Clear();
@@ -301,7 +390,7 @@ namespace ArchMasterConfig.Forms
                 serialPort.Close();
                 btnConnect.Text = "Connect Arduino";
                 lblStatus.Text = "Disconnected";
-                lblStatus.ForeColor = Colors.Cream;
+                lblStatus.ForeColor = Colors.MintCream;
                 return;
             }
 
@@ -319,7 +408,7 @@ namespace ArchMasterConfig.Forms
                 serialPort.Open();
                 btnConnect.Text = "Disconnect";
                 lblStatus.Text = $"Connected to {serialPort.PortName}";
-                lblStatus.ForeColor = Colors.LightGreen;
+                lblStatus.ForeColor = Colors.MidGreen;
             }
             catch (Exception ex)
             {
@@ -343,21 +432,18 @@ namespace ArchMasterConfig.Forms
                     serialPort.WriteLine(remap);
                 }
             }
-            catch { /* ignore */ }
+            catch { }
         }
         #endregion
     }
 
-    // ──────────────────────────────────────────────────────
-    //  Custom button – thick outline always + selection
-    // ──────────────────────────────────────────────────────
     public class KeyButton : Panel
     {
         public string PhysicalKey { get; set; } = "";
         public string RemapText   { get; set; } = "";
         public bool   IsSelected  { get; set; } = false;
         public int    CornerRadius { get; set; } = 18;
-        public Color  OutlineColor { get; set; } = MainForm.Colors.Mint;
+        public Color  OutlineColor { get; set; } = MainForm.Colors.TealGreen;
         public int    OutlineThickness { get; set; } = 4;
 
         private bool isHovered = false;
@@ -400,45 +486,38 @@ namespace ArchMasterConfig.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            e.Graphics.Clear(Parent?.BackColor ?? MainForm.Colors.Cream);
+            e.Graphics.Clear(Parent?.BackColor ?? MainForm.Colors.MintCream);
 
             var inset = OutlineThickness / 2f + 1;
             var rect = new Rectangle((int)inset, (int)inset, (int)(Width - inset * 2), (int)(Height - inset * 2));
             using var path = CreateRoundedRectangle(rect, CornerRadius);
 
-
             var shadow = new Rectangle((int)rect.X + 2, (int)rect.Y + 2, (int)rect.Width, (int)rect.Height);
             using (var sb = new SolidBrush(Color.FromArgb(40, 0, 0, 0)))
                 e.Graphics.FillPath(sb, CreateRoundedRectangle(shadow, CornerRadius));
 
-
-            // Fill
-            Color fill = IsSelected ? Color.FromArgb(179, 216, 168)
-                    : isHovered  ? Color.FromArgb(200, 230, 215)
-                    : MainForm.Colors.Cream;
-
+            Color fill = IsSelected ? Colors.MidGreen
+                        : isHovered  ? Colors.LightTeal
+                        : Colors.MintCream;
 
             using (var brush = new SolidBrush(fill))
                 e.Graphics.FillPath(brush, path);
 
-            // Outline
             using (var pen = new Pen(OutlineColor, OutlineThickness))
                 e.Graphics.DrawPath(pen, path);
 
-            // Selection border
             if (IsSelected)
             {
-                using var selPen = new Pen(MainForm.Colors.DarkGreen, OutlineThickness + 2);
+                using var selPen = new Pen(Colors.DarkGreen, OutlineThickness + 2);
                 e.Graphics.DrawPath(selPen, path);
             }
 
-            // Text
             TextRenderer.DrawText(
                 e.Graphics,
                 Text,
-                new Font("Segoe UI", 14F, FontStyle.Bold),
+                new Font("Poppins-regular", 14F, FontStyle.Bold),
                 rect,
-                MainForm.Colors.DarkGreen,
+                Colors.DarkGreen,
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 

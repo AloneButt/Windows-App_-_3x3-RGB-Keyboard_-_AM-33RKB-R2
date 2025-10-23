@@ -17,6 +17,7 @@ C:\Users\ichxortolia\Desktop\SC2025\ArchMasterConfig\obj\Debug\net8.0-windows\Ar
 C:\Users\ichxortolia\Desktop\SC2025\ArchMasterConfig\obj\Debug\net8.0-windows\ArchMasterConfig.AssemblyInfoInputs.cache
 C:\Users\ichxortolia\Desktop\SC2025\ArchMasterConfig\obj\Debug\net8.0-windows\ArchMasterConfig.AssemblyInfo.cs
 C:\Users\ichxortolia\Desktop\SC2025\ArchMasterConfig\obj\Debug\net8.0-windows\ArchMasterConfig.csproj.CoreCompileInputs.cache
+C:\Users\ichxortolia\Desktop\SC2025\ArchMasterConfig\obj\Debug\net8.0-windows\ArchMasterConfig.sourcelink.json
 C:\Users\ichxortolia\Desktop\SC2025\ArchMasterConfig\obj\Debug\net8.0-windows\ArchMast.FE42D7BE.Up2Date
 C:\Users\ichxortolia\Desktop\SC2025\ArchMasterConfig\obj\Debug\net8.0-windows\ArchMasterConfig.dll
 C:\Users\ichxortolia\Desktop\SC2025\ArchMasterConfig\obj\Debug\net8.0-windows\refint\ArchMasterConfig.dll

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ArchMasterConfig")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8da8b42cf59f3a4d7400c21dc91d2e1691c14998")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd9801a93bf3e1bbcce3486f9070e5dd1791a0a8")]
 [assembly: System.Reflection.AssemblyProductAttribute("ArchMasterConfig")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ArchMasterConfig")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

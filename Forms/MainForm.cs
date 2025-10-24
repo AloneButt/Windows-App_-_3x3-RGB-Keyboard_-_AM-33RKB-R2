@@ -47,15 +47,15 @@ namespace ArchMasterConfig.Forms
         // ────────
         public static class Colors
         {
-            public static readonly Color DeepGreen      = ColorTranslator.FromHtml("#081c15");
-            public static readonly Color DarkGreen      = ColorTranslator.FromHtml("#1b4332");
-            public static readonly Color ForestGreen    = ColorTranslator.FromHtml("#2d6a4f");
-            public static readonly Color TealGreen      = ColorTranslator.FromHtml("#40916c");
-            public static readonly Color MidGreen       = ColorTranslator.FromHtml("#52b788");
-            public static readonly Color LightTeal      = ColorTranslator.FromHtml("#74c69d");
-            public static readonly Color PaleGreen      = ColorTranslator.FromHtml("#95d5b2");
-            public static readonly Color MintCream      = ColorTranslator.FromHtml("#b7e4c7");
-            public static readonly Color LightMint      = ColorTranslator.FromHtml("#d8f3dc");
+            public static readonly Color Scale9      = ColorTranslator.FromHtml("#081c15");
+            public static readonly Color Scale8      = ColorTranslator.FromHtml("#1b4332");
+            public static readonly Color Scale7      = ColorTranslator.FromHtml("#2d6a4f");
+            public static readonly Color Scale6      = ColorTranslator.FromHtml("#40916c");
+            public static readonly Color Scale5      = ColorTranslator.FromHtml("#52b788");
+            public static readonly Color Scale4      = ColorTranslator.FromHtml("#74c69d");
+            public static readonly Color Scale3      = ColorTranslator.FromHtml("#95d5b2");
+            public static readonly Color Scale2      = ColorTranslator.FromHtml("#b7e4c7");
+            public static readonly Color Scale1      = ColorTranslator.FromHtml("#d8f3dc");
         }
 
         public MainForm()
@@ -72,18 +72,18 @@ namespace ArchMasterConfig.Forms
             Size                = new Size(760, 620);
             StartPosition       = FormStartPosition.CenterScreen;
             FormBorderStyle     = FormBorderStyle.None;
-            BackColor           = Colors.DarkGreen;
+            BackColor           = Colors.Scale8;
             Font                = new Font("Poppins-regular", 9F);
             Icon                = new Icon(@"media\archmaster.ico");
 
             // ── Header ───────────────────────────────────
             pnlHeader.Dock      = DockStyle.Top;
             pnlHeader.Height    = 70;
-            pnlHeader.BackColor = Colors.ForestGreen;
+            pnlHeader.BackColor = Colors.Scale7;
             pnlHeader.Padding   = new Padding(15);
             pnlHeader.Paint += (s, e) =>
             {
-                using var pen = new Pen(Colors.TealGreen, 3);
+                using var pen = new Pen(Colors.Scale6, 3);
                 e.Graphics.DrawLine(pen, 0, pnlHeader.Height - 1, pnlHeader.Width, pnlHeader.Height - 1);
             };
             pnlHeader.MouseDown += (s, e) =>
@@ -97,7 +97,7 @@ namespace ArchMasterConfig.Forms
 
             lblTitle.Text       = "ARCHMASTER";
             lblTitle.Font       = new Font("Poppins-regular", 16F, FontStyle.Bold);
-            lblTitle.ForeColor  = Colors.LightMint;
+            lblTitle.ForeColor  = Colors.Scale1;
             lblTitle.AutoSize   = true;
             lblTitle.Location   = new Point(15, 18);
             pnlHeader.Controls.Add(lblTitle);
@@ -106,8 +106,8 @@ namespace ArchMasterConfig.Forms
             // ── Custom Window Buttons ───────────────────────────────
             btnMinimize.Text = "MINIMIZE";
             btnMinimize.Font = new Font("Poppins-regular", 10F, FontStyle.Bold);
-            btnMinimize.ForeColor = Colors.LightMint;
-            btnMinimize.BackColor = Colors.ForestGreen;
+            btnMinimize.ForeColor = Colors.Scale1;
+            btnMinimize.BackColor = Colors.Scale7;
             btnMinimize.FlatStyle = FlatStyle.Flat;
             btnMinimize.FlatAppearance.BorderSize = 0;
             btnMinimize.Size = new Size(120, 40);
@@ -115,13 +115,13 @@ namespace ArchMasterConfig.Forms
             btnMinimize.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnMinimize.Cursor = Cursors.Hand;
             btnMinimize.Click += (s, e) => WindowState = FormWindowState.Minimized;
-            btnMinimize.MouseEnter += (s, e) => btnMinimize.BackColor = Colors.MidGreen;
-            btnMinimize.MouseLeave += (s, e) => btnMinimize.BackColor = Colors.ForestGreen;
+            btnMinimize.MouseEnter += (s, e) => btnMinimize.BackColor = Colors.Scale5;
+            btnMinimize.MouseLeave += (s, e) => btnMinimize.BackColor = Colors.Scale7;
 
             btnClose.Text = "CLOSE";
             btnClose.Font = new Font("Poppins-regular", 10F, FontStyle.Bold);
-            btnClose.ForeColor = Colors.LightMint;
-            btnClose.BackColor = Colors.ForestGreen;
+            btnClose.ForeColor = Colors.Scale1;
+            btnClose.BackColor = Colors.Scale7;
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.FlatAppearance.BorderSize = 0;
             btnClose.Size = new Size(120, 40);
@@ -130,21 +130,21 @@ namespace ArchMasterConfig.Forms
             btnClose.Cursor = Cursors.Hand;
             btnClose.Click += (s, e) => Close();
             btnClose.MouseEnter += (s, e) => btnClose.BackColor = Color.FromArgb(200, 50, 50);
-            btnClose.MouseLeave += (s, e) => btnClose.BackColor = Colors.ForestGreen;
+            btnClose.MouseLeave += (s, e) => btnClose.BackColor = Colors.Scale7;
 
             pnlHeader.Controls.AddRange(new[] { btnMinimize, btnClose });
 
             // ── Mode selector ─────────────────────────────
             lblMode.Text        = "Mode:";
-            lblMode.ForeColor   = Colors.MintCream;
+            lblMode.ForeColor   = Colors.Scale2;
             lblMode.Location    = new Point(30, 90);
             lblMode.AutoSize    = true;
 
             cmbMode.Items.AddRange(new[] { "Mode 1", "Mode 2" });
             cmbMode.SelectedIndex = 0;
             cmbMode.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbMode.BackColor   = Colors.LightTeal;
-            cmbMode.ForeColor   = Colors.DarkGreen;
+            cmbMode.BackColor   = Colors.Scale4;
+            cmbMode.ForeColor   = Colors.Scale8;
             cmbMode.FlatStyle   = FlatStyle.Flat;
             cmbMode.Location    = new Point(85, 87);
             cmbMode.Width       = 110;
@@ -152,7 +152,7 @@ namespace ArchMasterConfig.Forms
 
             // ── 3x3 key-grid panel ───────────────────────
             pnlKeyGrid.Size     = new Size(310, 310);
-            pnlKeyGrid.BackColor = Colors.MintCream;
+            pnlKeyGrid.BackColor = Colors.Scale2;
 
             const int btnSize = 82;
             const int spacing = 20;
@@ -171,7 +171,7 @@ namespace ArchMasterConfig.Forms
                     PhysicalKey= ((char)('A' + r * 3 + c)).ToString(),
                     Text       = ((char)('A' + r * 3 + c)).ToString(),
                     CornerRadius = 18,
-                    OutlineColor = Colors.TealGreen,
+                    OutlineColor = Colors.Scale6,
                     OutlineThickness = 4
                 };
 
@@ -182,14 +182,14 @@ namespace ArchMasterConfig.Forms
 
             // ── Remap field ───────────────────────────────
             lblRemap.Text       = "Remap to:";
-            lblRemap.ForeColor  = Colors.MintCream;
+            lblRemap.ForeColor  = Colors.Scale2;
             lblRemap.Location   = new Point(330, 130);
             lblRemap.AutoSize   = true;
 
             txtRemap.Location   = new Point(330, 155);
             txtRemap.Size       = new Size(240, 28);
-            txtRemap.BackColor  = Colors.LightTeal;
-            txtRemap.ForeColor  = Colors.DarkGreen;
+            txtRemap.BackColor  = Colors.Scale4;
+            txtRemap.ForeColor  = Colors.Scale8;
             txtRemap.Font       = new Font("Poppins-regular", 10F);
             txtRemap.BorderStyle= BorderStyle.FixedSingle;
             txtRemap.KeyDown    += TxtRemap_KeyDown;
@@ -197,20 +197,20 @@ namespace ArchMasterConfig.Forms
             // ── Connect / Save buttons ───────────────────
             btnConnect.Text               = "Connect Arduino";
             btnConnect.FlatStyle          = FlatStyle.Flat;
-            btnConnect.BackColor          = Colors.ForestGreen;
-            btnConnect.ForeColor          = Colors.LightMint;
+            btnConnect.BackColor          = Colors.Scale7;
+            btnConnect.ForeColor          = Colors.Scale1;
             btnConnect.FlatAppearance.BorderSize = 0;
             btnConnect.Font               = new Font("Poppins-regular", 9F, FontStyle.Bold);
             btnConnect.Size               = new Size(150, 40);
             btnConnect.Location           = new Point(30, 430);
             btnConnect.Click              += BtnConnect_Click;
-            btnConnect.MouseEnter         += (s, e) => btnConnect.BackColor = Colors.MidGreen;
-            btnConnect.MouseLeave         += (s, e) => btnConnect.BackColor = Colors.ForestGreen;
+            btnConnect.MouseEnter         += (s, e) => btnConnect.BackColor = Colors.Scale5;
+            btnConnect.MouseLeave         += (s, e) => btnConnect.BackColor = Colors.Scale7;
 
             btnSave.Text                  = "Save Config";
             btnSave.FlatStyle             = FlatStyle.Flat;
-            btnSave.BackColor             = Colors.LightTeal;
-            btnSave.ForeColor             = Colors.DarkGreen;
+            btnSave.BackColor             = Colors.Scale4;
+            btnSave.ForeColor             = Colors.Scale8;
             btnSave.FlatAppearance.BorderSize = 0;
             btnSave.Font                  = new Font("Poppins-regular", 9F, FontStyle.Bold);
             btnSave.Size                  = new Size(120, 40);
@@ -219,7 +219,7 @@ namespace ArchMasterConfig.Forms
 
             // ── Status label ─────────────────────────────
             lblStatus.Text                = "Not connected";
-            lblStatus.ForeColor           = Colors.MintCream;
+            lblStatus.ForeColor           = Colors.Scale2;
             lblStatus.Font                = new Font("Poppins-regular", 9F, FontStyle.Italic);
             lblStatus.Location            = new Point(30, 490);
             lblStatus.AutoSize            = true;
@@ -231,7 +231,7 @@ namespace ArchMasterConfig.Forms
                 Padding = new Padding(20, 80, 20, 20),
                 ColumnCount = 2,
                 RowCount = 3,
-                BackColor = Colors.DarkGreen
+                BackColor = Colors.Scale8
             };
 
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45F));
@@ -245,7 +245,7 @@ namespace ArchMasterConfig.Forms
             {
                 FlowDirection = FlowDirection.LeftToRight,
                 AutoSize = true,
-                BackColor = Colors.DarkGreen
+                BackColor = Colors.Scale8
             };
             modePanel.Controls.Add(lblMode);
             modePanel.Controls.Add(cmbMode);
@@ -254,7 +254,7 @@ namespace ArchMasterConfig.Forms
             {
                 FlowDirection = FlowDirection.TopDown,
                 AutoSize = true,
-                BackColor = Colors.DarkGreen
+                BackColor = Colors.Scale8
             };
             remapPanel.Controls.Add(lblRemap);
             remapPanel.Controls.Add(txtRemap);
@@ -263,7 +263,7 @@ namespace ArchMasterConfig.Forms
             {
                 FlowDirection = FlowDirection.LeftToRight,
                 AutoSize = true,
-                BackColor = Colors.DarkGreen
+                BackColor = Colors.Scale8
             };
             buttonPanel.Controls.Add(btnConnect);
             buttonPanel.Controls.Add(btnSave);
@@ -337,7 +337,7 @@ namespace ArchMasterConfig.Forms
             var json = JsonConvert.SerializeObject(config, Formatting.Indented);
             System.IO.File.WriteAllText(configPath, json);
             lblStatus.Text = "Config saved!";
-            lblStatus.ForeColor = Colors.MidGreen;
+            lblStatus.ForeColor = Colors.Scale5;
             Task.Delay(2000).ContinueWith(_ => Invoke(() =>
                 lblStatus.Text = serialPort?.IsOpen == true
                     ? $"Connected to {serialPort.PortName}"
@@ -375,7 +375,7 @@ namespace ArchMasterConfig.Forms
                 selectedKeyButton.RemapText = txtRemap.Text.Trim();
 
                 selectedKeyButton.IsSelected = false;
-                selectedKeyButton.BackColor = Colors.MintCream;
+                selectedKeyButton.BackColor = Colors.Scale2;
                 selectedKeyButton.Invalidate();
                 selectedKeyButton = null;
                 txtRemap.Clear();
@@ -390,7 +390,7 @@ namespace ArchMasterConfig.Forms
                 serialPort.Close();
                 btnConnect.Text = "Connect Arduino";
                 lblStatus.Text = "Disconnected";
-                lblStatus.ForeColor = Colors.MintCream;
+                lblStatus.ForeColor = Colors.Scale2;
                 return;
             }
 
@@ -408,7 +408,7 @@ namespace ArchMasterConfig.Forms
                 serialPort.Open();
                 btnConnect.Text = "Disconnect";
                 lblStatus.Text = $"Connected to {serialPort.PortName}";
-                lblStatus.ForeColor = Colors.MidGreen;
+                lblStatus.ForeColor = Colors.Scale5;
             }
             catch (Exception ex)
             {
@@ -443,7 +443,7 @@ namespace ArchMasterConfig.Forms
         public string RemapText   { get; set; } = "";
         public bool   IsSelected  { get; set; } = false;
         public int    CornerRadius { get; set; } = 18;
-        public Color  OutlineColor { get; set; } = MainForm.Colors.TealGreen;
+        public Color  OutlineColor { get; set; } = MainForm.Colors.Scale6;
         public int    OutlineThickness { get; set; } = 4;
 
         private bool isHovered = false;
@@ -486,7 +486,7 @@ namespace ArchMasterConfig.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            e.Graphics.Clear(Parent?.BackColor ?? MainForm.Colors.MintCream);
+            e.Graphics.Clear(Parent?.BackColor ?? MainForm.Colors.Scale2);
 
             var inset = OutlineThickness / 2f + 1;
             var rect = new Rectangle((int)inset, (int)inset, (int)(Width - inset * 2), (int)(Height - inset * 2));
@@ -496,9 +496,9 @@ namespace ArchMasterConfig.Forms
             using (var sb = new SolidBrush(Color.FromArgb(40, 0, 0, 0)))
                 e.Graphics.FillPath(sb, CreateRoundedRectangle(shadow, CornerRadius));
 
-            Color fill = IsSelected ? Colors.MidGreen
-                        : isHovered  ? Colors.LightTeal
-                        : Colors.MintCream;
+            Color fill = IsSelected ? Colors.Scale5
+                        : isHovered  ? Colors.Scale4
+                        : Colors.Scale2;
 
             using (var brush = new SolidBrush(fill))
                 e.Graphics.FillPath(brush, path);
@@ -508,7 +508,7 @@ namespace ArchMasterConfig.Forms
 
             if (IsSelected)
             {
-                using var selPen = new Pen(Colors.DarkGreen, OutlineThickness + 2);
+                using var selPen = new Pen(Colors.Scale8, OutlineThickness + 2);
                 e.Graphics.DrawPath(selPen, path);
             }
 
@@ -517,7 +517,7 @@ namespace ArchMasterConfig.Forms
                 Text,
                 new Font("Poppins-regular", 14F, FontStyle.Bold),
                 rect,
-                Colors.DarkGreen,
+                Colors.Scale8,
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 
